@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define TITLE_SIZE 2
-#define BLOCK_SIZE 512
+#define BLOCK_SIZE 2
 typedef struct str{
   char data[TITLE_SIZE];
   unsigned size;
@@ -53,8 +53,22 @@ void in_product (FILE **f, product **el);
 void in_orders (FILE **f, order **el);
 void print_title (str *head);
 str * get_head (str *el);
+source * get_head_source (source *el);
+source * get_source (source *el, unsigned id);
+
+source * get_source (source *el, unsigned id){
+  el = get_head_source(el);
+  while (el != NULL && el->id != id)
+    el = el->n;
+  return el;
+}
 
 str * get_head (str *el){
+  while (el->prev != NULL)
+    el = el->prev;
+  return el;
+}
+source * get_head_source (source *el){
   while (el->prev != NULL)
     el = el->prev;
   return el;
@@ -68,15 +82,19 @@ void print_title (str *head){
   }
 }
 
-void in_source (FILE **f, source **el){
+void in_product (FILE **f, product **el, source *src1){
   char c;
-  int i,j=0, was_set=0;
+  int i=0,j=0, was_set=0;
   unsigned id, num;
   str *title;
-  source *tmp;
-  for (i = 0; i<BLOCK_SIZE && !feof(*f); i++){
+  product *tmp;
+  a_src *t;
+  
+  while(!feof(*f)){
+    i=0;
+  while (i<BLOCK_SIZE && fscanf(*f, "%c", &c) != EOF){
+    printf("%c", c);
     if (!was_set){
-      if (fscanf (*f, "%d %d", &id, &num)==EOF)break;
       if(i!=0){ tmp = (source *) malloc (sizeof(source));
 	tmp->n = NULL;
 	(*el)->n = tmp;
@@ -89,23 +107,37 @@ void in_source (FILE **f, source **el){
 	((*el)->title)->size=0;
 	((*el)->title)->n=NULL;
 	((*el)->title)->prev = NULL;
-	printf("dfdfdfdfdfdf\n");}
-      (*el)->id = id;
-      (*el)->num = num;
-      was_set = 1;
-    }else if (fscanf (*f, "%c", &c) != EOF){
+      }
       
-      if (c == '\n'){
+      was_set = 1;
+    }
+
+    if (c == '\n'){
 	was_set = 0;
+	i++;
+    }else if (c == '#'){
+      if (fscanf (*f, "%d:%d", &id, &num)!=EOF){
 	
-      }else{
+	  t = (a_src *) malloc (sizeof(a_src));
+	  t->prev = (*e)->contains;
+	  t->n = NULL;
+	  t->src = get_source(src1, id);
+	  t->num = num;
+	  if ((*e)->contains != NULL)
+	    ((*e)->contains)->n = t;
+	  (*e)->contains = t;
+	
+      i++;
+      }
+    }else{
+      i++;
 	if (j < TITLE_SIZE-((*el)->title)->size){
 	  
 	  ((*el)->title)->data[((*el)->title)->size+j] = c;
-	  printf("%d %c\n", ((*el)->title)->size, c);
+	  
 	  j++;
 	}else{
-	  //printf("%c", c);
+
 	  title = (str *) malloc (sizeof(str));
 	  title->size=0;
 	  title->n=NULL;
@@ -116,11 +148,74 @@ void in_source (FILE **f, source **el){
 	  (*el)->title = title;
 	  j=1;
 	}
-      }
     }
   }
   if(((*el)->title)->size == 0) ((*el)->title)->size = j;
+  }
 }
+
+void in_source (FILE **f, source **el){
+  char c;
+  int i=0,j=0, was_set=0;
+  unsigned id, num;
+  str *title;
+  source *tmp;
+  while(!feof(*f)){
+    i=0;
+  while (i<BLOCK_SIZE && fscanf(*f, "%c", &c) != EOF){
+    printf("%c", c);
+    if (!was_set){
+      if(i!=0){ tmp = (source *) malloc (sizeof(source));
+	tmp->n = NULL;
+	(*el)->n = tmp;
+	tmp->prev = *el;
+	((*el)->title)->size = ((*el)->title)->size+j;
+	j=0;
+	*el = tmp;
+	//	title = (*el)->title;
+	(*el)->title = (str *) malloc (sizeof(str));
+	((*el)->title)->size=0;
+	((*el)->title)->n=NULL;
+	((*el)->title)->prev = NULL;
+      }
+      
+      was_set = 1;
+    }
+
+    if (c == '\n'){
+	was_set = 0;
+	i++;
+    }else if (c == '#'){
+      if (fscanf (*f, "%d:%d", &id, &num)!=EOF){
+      (*el)->id = id;
+      (*el)->num = num;
+      i++;
+      }
+    }else{
+      i++;
+	if (j < TITLE_SIZE-((*el)->title)->size){
+	  
+	  ((*el)->title)->data[((*el)->title)->size+j] = c;
+	  
+	  j++;
+	}else{
+
+	  title = (str *) malloc (sizeof(str));
+	  title->size=0;
+	  title->n=NULL;
+	  title->data[0] = c;
+	  ((*el)->title)->n = title;
+	  ((*el)->title)->size = j;
+	  title->prev = (*el)->title;
+	  (*el)->title = title;
+	  j=1;
+	}
+    }
+  }
+  if(((*el)->title)->size == 0) ((*el)->title)->size = j;
+  }
+}
+
 
 int main(void){
   source *head, *src = (source *) malloc(sizeof(source));
@@ -131,18 +226,18 @@ int main(void){
   (src->title)->prev = NULL;
   head = src;
   FILE *f = fopen ("in.txt", "r");
-  while (!feof(f)){
+  // while (!feof(f)){
     
     in_source(&f, &src);
-    
-  }
+    printf ("sss\n");
+    //  }
 
   while (head != NULL){
-    printf("%d %d", head->id, head->num);
+    printf("id:%d num:%d", head->id, head->num);
     print_title(head->title);
     printf("\n");
     head = head->n;
   }
-
+  free(src);
   fclose(f);
 }

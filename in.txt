@@ -1,3 +1,3 @@
-1 2 gold
-2 2 gold2
-3 2 silver
+#1:2 #1:3 gold
+#2:2 gold2
+#3:2 silver
