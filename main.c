@@ -52,7 +52,7 @@ typedef struct order{
 
 void in_source (FILE *f, source **el);
 void in_product (FILE *f, product **el, source *sources);
-void in_orders (FILE **f, order **el, product *prd1);
+void in_orders (FILE *f, order **el, product *products);
 void print_title (str *head);
 str * get_head (str *el);
 source * get_head_source (source *el);
@@ -131,89 +131,6 @@ void print_title (str *head){
 
 
 
-void in_orders (FILE **f, order **el, product *prd1){
-  char c;
-  int i=0,j=0, was_set=0;
-  unsigned id, num;
-  str *title;
-  order *tmp;
-  a_product *t;
-  
-  while(!feof(*f)){
-    i=0;
-  while (i<BLOCK_SIZE && fscanf(*f, "%c", &c) != EOF){
-    printf("%c", c);
-    if (!was_set){
-       
-      if(i!=0){ tmp = (order *) malloc (sizeof(order));
-	tmp->n = NULL;
-	(*el)->n = tmp;
-	tmp->prev = *el;
-	((*el)->title)->size = ((*el)->title)->size+j;
-	j=0;
-	*el = tmp;
-	//	title = (*el)->title;
-	(*el)->title = (str *) malloc (sizeof(str));
-	((*el)->title)->size=0;
-	((*el)->title)->n=NULL;
-	((*el)->title)->prev = NULL;
-	(*el)->contains = NULL;
-	
-      }
-      
-      was_set = 1;
-    }
-
-    if (c == '\n'){
-	was_set = 0;
-	i++;
-    }else if (c == '#'){
-      if (fscanf (*f, "%d:%d", &id, &num)!=EOF){
-	
-	  t = (a_product *) malloc (sizeof(a_product));
-	  t->prev = (*el)->contains;
-	  t->n = NULL;
-	  t->product = get_product(prd1, id);
-	  t->num = num;
-	  if ((*el)->contains != NULL)
-	    ((*el)->contains)->n = t;
-	  (*el)->contains = t;
-	
-      i++;
-      }
-    }else if (c == '$'){
-      fscanf(*f, "%d", &id);
-       (*el)->id = id;
-       i++;
-    }else{
-      i++;
-	if (j < TITLE_SIZE-((*el)->title)->size){
-	  
-	  ((*el)->title)->data[((*el)->title)->size+j] = c;
-	  
-	  j++;
-	}else{
-
-	  title = (str *) malloc (sizeof(str));
-	  title->size=0;
-	  title->n=NULL;
-	  title->data[0] = c;
-	  ((*el)->title)->n = title;
-	  ((*el)->title)->size = j;
-	  title->prev = (*el)->title;
-	  (*el)->title = title;
-	  j=1;
-	}
-    }
-  }
-  if(((*el)->title)->size == 0) ((*el)->title)->size = j;
-  }
-  while ((*el)->prev != NULL){
-    (*el)->contains = get_head_a_product((*el)->contains);
-    (*el) = (*el)->prev;
-  }
-  (*el)->contains = get_head_a_product((*el)->contains);
-}
 
 void in_product (FILE *f, product **el, source *sources){
 
@@ -306,6 +223,97 @@ void in_product (FILE *f, product **el, source *sources){
   
 }
 
+void in_orders (FILE *f, order **el, product *products){
+
+  order *cur=NULL, *src=NULL;
+  unsigned id, i, j=0,was_end=1;
+  float num;
+  char c;
+  str *title;
+  a_product *temp;
+  
+  while (!feof(f)){
+    i=0;
+    while (i < BLOCK_SIZE && fscanf(f, "%c", &c) != EOF){
+      if (was_end){
+	if (cur != NULL)(cur->title)->size += j;
+	j=0;
+	src = (order *) malloc(sizeof(order));
+	fscanf(f, "%d", &id);
+	src->id = id;
+	src->prev = NULL;
+	src->n = NULL;
+	src->contains = NULL;
+	src->title = (str *) malloc(sizeof(str));
+	(src->title)->size = 0;
+	(src->title)->n = NULL;
+	(src->title)->prev = NULL;
+	if (cur == NULL){
+	  cur = src;
+	}else{
+	  cur->n = src;
+	  src->prev = cur;
+	}
+	cur = src;
+	i++;
+	was_end = 0;
+	continue;
+      }else{
+	if (c == '\n'){
+	  was_end = 1;
+	  continue;
+	}else if(c == '#'){
+	  fscanf (f, "%d:%f", &id, &num);
+	  temp = (a_product *) malloc(sizeof(a_product));
+	  temp->n = NULL;
+	  temp->prev = NULL;
+	  temp->num = num;
+	  temp->product = get_product(products, id);
+	  if (cur->contains == NULL){
+	    cur->contains = temp;
+	  }else{
+	    (cur->contains)->n = temp;
+	    temp->prev = cur->contains;
+	    cur->contains = temp;
+	  }
+	  i++;
+	}else{
+	 i++;
+	 if (j < TITLE_SIZE - (cur->title)->size){
+	   (cur->title)->data[(cur->title)->size + j] = c;
+	   j++;
+	 }else{
+	  title = (str *) malloc (sizeof(str));
+	  title->size=0;
+	  title->n=NULL;
+	  title->data[0] = c;
+	  ((cur)->title)->n = title;
+	  ((cur)->title)->size = j;
+	  title->prev = (cur)->title;
+	  (cur)->title = title;
+	  j=1;
+	 } 
+	}
+      }
+    }
+  }
+
+
+
+  
+  *el = get_head_order(cur);
+  order *head = *el;
+
+  while (head != NULL){
+    temp = get_head_a_product(head->contains);
+    head->contains = temp;
+    head = head->n;
+  }
+  
+  if(((*el)->title)->size == 0) ((*el)->title)->size = j;
+  
+}
+
 
 void in_source (FILE *f, source **el){
 
@@ -379,24 +387,15 @@ void in_source (FILE *f, source **el){
 int main(void){
   source *src;
   product *prd;
-  /*src->n = NULL;
-  src->prev= NULL;
-  src->title = (str *) malloc(sizeof(str));
-  (src->title)->size = 0;
-  (src->title)->prev = NULL;*/
-  /*product *head, *prd=(product *) malloc(sizeof(product));;
-  prd->n = NULL;
-  prd->prev= NULL;
-  prd->contains = NULL;
-  prd->title = (str *) malloc(sizeof(str));
-  (prd->title)->size = 0;
-  (prd->title)->prev = NULL;*/
+  order *ord;
   FILE *f = fopen ("in.txt", "r");
-  // while (!feof(f)){ 
-    in_source(f, &src);
+   in_source(f, &src);
    fclose(f);
    f = fopen("in-product.txt", "r");
    in_product (f, &prd, src);
+   fclose(f);
+   f = fopen("in-orders.txt", "r");
+   in_orders(f, &ord, prd);
    fclose(f);
    a_src *t;
    while (prd != NULL){
@@ -412,6 +411,22 @@ int main(void){
      printf ("\n============\n");
      prd = prd->n;
    }
+   //prd = get_head_product(prd);
+   a_product* pp=NULL;
+   while(ord != NULL){
+     printf ("%d", ord->id);
+     print_title(ord->title);
+     pp = ord->contains;
+     printf ("contains:");
+     while (pp!= NULL){
+       printf ("%d %f ", (pp->product)->id, pp->num);
+       print_title((pp->product)->title);
+       pp = pp->n;
+     }
+     printf ("\n============\n");
+     ord = ord->n;
+   }
+   
    /*f = fopen ("in-product.txt", "r");
    in_product(&f, &prd, src);
    fclose(f);
