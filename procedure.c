@@ -34,6 +34,18 @@ order * from_arg_to_list (order *ord, int *orders, int n){
   return get_head_order(order);
 }
 
+int longest_solution (int **solutions, int n, int max){
+  int i,j;
+  for (i=0; i<n; i++){
+    for (j=0; j<=max; j++){
+      if (solutions[i][j] == 0) break;
+    }
+    if (j == max){
+      return i;
+    }
+  }
+}
+
 int iscorrect (source *src, order *ord, int n, int *res, int p){
   int i;
   source *hsrc;
