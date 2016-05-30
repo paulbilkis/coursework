@@ -32,24 +32,22 @@ int main(void){
      prd = prd->n;
    }
    //   printf ("\n\n num of gold in order #1: %f\n\n", num_of_res(ord, 1, 3));
-   //prd = get_head_product(prd);
-   int ps[] = {1};
-   printf("\n%d\n", iscorrect(src, ord, 0, ps, 2));
-   a_product* pp=NULL;
-   while(ord != NULL){
-     printf ("id:%d", ord->id);
-     print_title(ord->title);
-     pp = ord->contains;
-     printf ("\ncontains:\n");
-     while (pp!= NULL){
-       printf ("%d %d pieces of ", (pp->product)->id, pp->num);
-       print_title((pp->product)->title);
-       printf("\n");
-       pp = pp->n;
+   //prd = get_head_product(prd);  
+   //printf("\n%d\n", iscorrect(src, ord, 0, ps, 2));
+   int *arg, n, i, *res,ls;
+   //order *ord33 = from_arg_to_list (ord, arg, 3);
+   printf("order have been read:\n");
+   out_orders(ord);
+   printf("\n*-*-*-*-*-*\n");
+   n = from_list_to_arg(ord, &arg);
+   res = (int*) malloc(n*sizeof(int));
+   for (i=0;i<n;i++)
+     res[i] = 0;
+   
+   
+   recursive(src, ord, arg, res, 0,0,n);
+   ls = longest_solution(d, size, max);
+   for(i=0;i<=max;i++){
+     printf("\n(%d)\n", d[ls][i]);
      }
-     printf ("\n============\n");
-     ord = ord->n;
-   }
-     
-  
 }

@@ -1,5 +1,5 @@
 #1:200:g gold-982
 #2:200:g gold-585
-#3:200:g silver
+#3:240:g silver
 #4:20:p 1 carate diamond
 #5:150:g platinum
