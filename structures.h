@@ -44,10 +44,18 @@ typedef struct a_product{
 
 typedef struct order{
   unsigned id;
-  a_product *contains;
-  str *title;
+  unsigned client_id;
+  unsigned num;
+  product *contains;
   struct order *n;
   struct order *prev;
 }order;
+
+typedef struct client{
+  unsigned id;
+  str *title;
+  struct client *n;
+  struct client *prev;
+}client;
 
 #endif // STRUCTURES_H

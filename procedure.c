@@ -53,14 +53,23 @@ int from_list_to_arg (order *ord, int **arg_1){
   return n;
 }
 
-int longest_solution (int **solutions, int n, int maxx){
-  int i,j;
+int longest_solution (int **solutions, order *ord, int n, int maxx){
+  int i,j, mx=0, nm=0, i_max=0;
+  order *or;
   for (i=0; i<n; i++){
-    for (j=0; j<=maxx && solutions[i][j] != 0; j++);
-    if (j == maxx+1){
-      return i;
+    nm=0;
+    for (j=0; j<=maxx; j++){
+      if (solutions[i][j] != 0){
+	or = get_order(ord, solutions[i][j]);
+	nm += or->num;
+      }
+    }
+    if (nm > mx){
+      mx = nm;
+      i_max = i;
     }
   }
+  return i_max;
 }
 
 int max=0;
@@ -119,18 +128,15 @@ int iscorrect (source *src, order *ord, int n, int *res, int p){
 }
 
 float num_of_res (order *ord, unsigned order_id, unsigned source_id){
-  order *order = get_order(ord, order_id);
-  a_product *aprd = order->contains;
+  order *ordr = get_order(ord, order_id);
+  product *aprd = ordr->contains;
   a_src *asrc;
   float num=0;
-  while(aprd!=NULL){
-    asrc = (aprd->product)->contains;//начало списка состава a_src
+    asrc = aprd->contains;//начало списка состава a_src
     while (asrc!=NULL){
       if ((asrc->src)->id == source_id)
-	  num += aprd->num * asrc->num;
+	  num += ordr->num * asrc->num;
       asrc = asrc->n;
     }
-    aprd = aprd->n;
-  }
   return num;
 }

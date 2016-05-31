@@ -1,25 +1,16 @@
 
 sources have been red from file:
 id:1 amount:200.000000g name: gold-982
-id:1 amount:200.000000g name:
 
 
 product receipts have been red from file:
 id:1 name:  gold-silver ring
 contains:
-18042894.000000g of gold-982
+10.300000g of gold-982
 ============
 
+clients have been red from file:
+
+id:1 name: mrs robinson
+id:2 name: herr sacher-masoch
 orders have been read:
-@id:1  order1
-contains:
-9 pcs of  gold-silver ring
-============
-@id:2  order2
-contains:
-10 pcs of  gold-silver ring
-============
-@id:3  order3
-contains:
-8 pcs of  gold-silver ring
-============

@@ -1,4 +1,10 @@
 #include "headers.h"
+client * get_head_client(client *h){
+  while (h->prev != NULL)
+    h = h->prev;
+  return h;
+}
+
 int is_there_prd (product *prd, int id){
   if (get_product (prd, id) == NULL) return 0;
   else return 1;
