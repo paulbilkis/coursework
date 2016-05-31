@@ -5,3 +5,4 @@ $4 #1:50 #4:5 golden ring with diamonds
 $5 #3:80 silver chain
 $6 #3:180 heavy silver chain
 $7 #5:100 platinum wire
+$8 #1:1 1g gold

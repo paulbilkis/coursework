@@ -1,0 +1,73 @@
+
+sources have been red from file:
+id:1 amount:200.000000g name: gold-982
+id:2 amount:200.000000g name: gold-585
+id:3 amount:240.000000g name: silver
+id:4 amount:20.000000p name: 1 carate diamond
+id:5 amount:150.000000g name: platinum
+
+
+product receipts have been red from file:
+id:1 name:   gold-silver ring
+contains:
+16.245001g of gold-982
+86.879997g of silver
+============
+id:2 name:  gold coin
+contains:
+21.540001g of gold-982
+============
+id:3 name:  silver coin
+contains:
+30.450001g of silver
+============
+id:4 name:   golden ring with diamonds
+contains:
+54.650002g of gold-982
+5.000000p of 1 carate diamond
+============
+id:5 name:  silver chain
+contains:
+82.800003g of silver
+============
+id:6 name:  heavy silver chain
+contains:
+195.479996g of silver
+============
+id:7 name:  platinum wire
+contains:
+109.199997g of platinum
+============
+id:8 name:  1g gold
+contains:
+1.049000g of gold-982
+============
+@id:1  order1
+contains:
+1 pcs of   gold-silver ring
+============
+@id:2  order2
+contains:
+1000 pcs of  gold coin
+============
+@id:3  order3
+contains:
+2 pcs of   gold-silver ring
+============
+@id:4 
+contains:
+1 pcs of  1g gold
+============
+@id:5 
+contains:
+1 pcs of  1g gold
+============
+@id:6  
+contains:
+1 pcs of  1g gold
+100 pcs of  silver coin
+============
+@id:7 
+contains:
+1 pcs of  1g gold
+============

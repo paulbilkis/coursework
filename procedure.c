@@ -2,13 +2,19 @@
 #include <string.h>
 #include <stdlib.h>
 #include "headers.h"
-
+/*
+void delete_uncorrect_prd_from_ord(order *hd){
+  order *head = get_head_order(hd);
+  a_product *cur, *temp;
+  whi
+}
+*/
 void delete_imp_orders (order *ord, source *src){
   order *temp,*head = get_head_order(ord);
   while (head!=NULL){
     if(!iscorrect(src,ord,0,0,head->id)){
       if(head->n != NULL) (head->n)->prev = head->prev;
-      (head->prev)->n = head->n;
+      if (head->prev != NULL) (head->prev)->n = head->n;
       temp = head->n;
       free(head);
       head = temp;
@@ -70,10 +76,10 @@ int recursive (source *src, order *ord, int *p, int *res, int j, int cur, int n)
        if (cur > max)
        max = cur;
       res[cur] = p[i];
-      int s=0;
+      /*int s=0;
       for (s=0; s<n;s++)
       printf("_%d %d\n", res[s], cur);
-      printf("=========");
+      printf("=========");*/
       d = (int**) realloc(d, (size+1)*sizeof(int*));
       d[size] = (int*) malloc(n*sizeof(int));
       memcpy(d[size], res, n*sizeof(int));
@@ -100,12 +106,12 @@ int iscorrect (source *src, order *ord, int n, int *res, int p){
       for (i=0; i<=n; i++){
 	if(res[i]!=0){
 	  num += num_of_res(ord, res[i], hsrc->id);
-	  printf("\n\n%d %d %f\n\n", hsrc->id, res[i], num);
+	  //printf("\n\n%d %d %f\n\n", hsrc->id, res[i], num);
 	}
       }
     }
     num += num_of_res(ord, p, hsrc->id);
-    printf("%d %f*@*#*$\n", p, num);
+    //printf("%d %f*@*#*$\n", p, num);
     if (num > hsrc->num) return 0;
     hsrc = hsrc->n;
   }

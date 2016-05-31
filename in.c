@@ -1,6 +1,9 @@
 #include "utility.h"
 #include <stdio.h>
 #include <stdlib.h>
+float rnd (float num){
+  return (((rand() % 100))*0.1*0.01 + 1)*num;
+}
 
 void in_product (FILE *f, product **el, source *sources){
 
@@ -46,8 +49,10 @@ void in_product (FILE *f, product **el, source *sources){
 	  temp = (a_src *) malloc(sizeof(a_src));
 	  temp->n = NULL;
 	  temp->prev = NULL;
-	  temp->num = num;
 	  temp->src = get_source(sources, id);
+	  if ((temp->src)->type != 'p') temp->num = rnd(num);
+	  else temp->num = (int) num;
+	  
 	  if (cur->contains == NULL){
 	    cur->contains = temp;
 	  }else{
@@ -134,11 +139,13 @@ void in_orders (FILE *f, order **el, product *products){
 	  continue;
 	}else if(c == '#'){
 	  fscanf (f, "%d:%d", &id, &num);
+	  
 	  temp = (a_product *) malloc(sizeof(a_product));
 	  temp->n = NULL;
 	  temp->prev = NULL;
 	  temp->num = num;
 	  temp->product = get_product(products, id);
+	  
 	  if (cur->contains == NULL){
 	    cur->contains = temp;
 	  }else{
@@ -146,6 +153,7 @@ void in_orders (FILE *f, order **el, product *products){
 	    temp->prev = cur->contains;
 	    cur->contains = temp;
 	  }
+	  
 	  i++;
 	}else{
 	 i++;

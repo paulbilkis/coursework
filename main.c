@@ -4,12 +4,13 @@
 #include "headers.h"
 
 int main(void){
-  source *src;
+  source *src, *head_src;
   product *prd;
   order *ord;
   FILE *f = fopen ("in.txt", "r");
    in_source(f, &src);
    fclose(f);
+   head_src = src;
    f = fopen("in-product.txt", "r");
    in_product (f, &prd, src);
    fclose(f);
@@ -17,37 +18,50 @@ int main(void){
    in_orders(f, &ord, prd);
    fclose(f);
    a_src *t;
+   f = fopen("log.txt", "w");
+   fprintf(f, "\nsources have been red from file:\n");
+   while (head_src != NULL){
+     fprintf(f, "id:%d amount:%f%c name:", head_src->id, head_src->num, head_src->type);
+     fprint_title(head_src->title,f);
+     fprintf(f,"\n");
+     head_src = head_src->n;
+     }
+   //src = get_head_source(src);
+   fprintf(f, "\n\nproduct receipts have been red from file:\n");
    while (prd != NULL){
-     printf ("id:%d name:", prd->id);
-     print_title(prd->title);
+     fprintf (f,"id:%d name:", prd->id);
+     fprint_title(prd->title, f);
      t = prd->contains;
-     printf ("\ncontains:\n");
+     fprintf (f,"\ncontains:\n");
      while (t!= NULL){
-       printf ("id:%d %f%c of", (t->src)->id, t->num, (t->src)->type);
-       print_title((t->src)->title);
-       printf("\n");
+       fprintf (f,"%f%c of", t->num, (t->src)->type);
+       fprint_title((t->src)->title,f);
+       fprintf(f,"\n");
        t = t->n;
      }
-     printf ("\n============\n");
+     fprintf (f,"============\n");
      prd = prd->n;
-   }
-   //   printf ("\n\n num of gold in order #1: %f\n\n", num_of_res(ord, 1, 3));
-   //prd = get_head_product(prd);  
-   //printf("\n%d\n", iscorrect(src, ord, 0, ps, 2));
+     }
+   // prd = get_head_product(prd);
    int *arg, n, i, *res,ls;
-   //order *ord33 = from_arg_to_list (ord, arg, 3);
-   printf("order have been read:\n");
-   out_orders(ord);
-   printf("\n*-*-*-*-*-*\n");
+   //fprintf(f,"orders have been read:\n");
+   fout_orders(ord,f);
+   fclose(f);
+   delete_imp_orders(ord, src);
+   //out_orders(ord);
+   //printf("\n*-*-*-*-*-*\n");
    n = from_list_to_arg(ord, &arg);
    res = (int*) malloc(n*sizeof(int));
    for (i=0;i<n;i++)
      res[i] = 0;
-   
-   
+	       
+   f = fopen("out.txt", "w");
    recursive(src, ord, arg, res, 0,0,n);
    ls = longest_solution(d, size, max);
-   for(i=0;i<=max;i++){
-     printf("\n(%d)\n", d[ls][i]);
-     }
+   order *result = from_arg_to_list(ord, d[ls], max+1);
+   printf("orders acomplish:\n");
+   fprintf(f,"orders acomplish:\n");
+   out_orders(result);
+   fout_orders(result,f);
+   fclose(f);
 }
