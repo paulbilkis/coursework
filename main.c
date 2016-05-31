@@ -44,7 +44,7 @@ int main(void){
      }
    // prd = get_head_product(prd);
    int *arg, n, i, *res,ls;
-   //fprintf(f,"orders have been read:\n");
+   fprintf(f,"\norders have been read:\n");
    fout_orders(ord,f);
    fclose(f);
    delete_imp_orders(ord, src);
