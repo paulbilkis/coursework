@@ -1,12 +1,16 @@
 
 sources have been red from file:
-id:1 amount:200.000000g name: gold-982
+id:1 amount:220.000000g name: gold-982
 
 
 product receipts have been red from file:
 id:1 name:  gold-silver ring
 contains:
 10.300000g of gold-982
+============
+id:2 name:  1g-piece-of-gold
+contains:
+1.060000g of gold-982
 ============
 
 clients have been red from file:

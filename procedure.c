@@ -28,6 +28,7 @@ order * from_arg_to_list (order *ord, int *orders, int n){
   int i;
   order *prev=NULL,*temp=NULL,*orde=NULL;
   for (i=0; i<n; i++){
+    if(orders[i] != 0){
     orde = (order*) malloc(sizeof(order));
     temp = get_order(ord, orders[i]);
     memcpy(orde, temp, sizeof(order));
@@ -35,6 +36,7 @@ order * from_arg_to_list (order *ord, int *orders, int n){
     orde->prev = prev;
     if (prev !=NULL) prev->n = orde;
     prev = orde;
+    }
   }
   return get_head_order(orde);
 }
@@ -53,8 +55,24 @@ int from_list_to_arg (order *ord, int **arg_1){
   return n;
 }
 
+void get_rid_source_stock (order *ord, source *src){
+  source * head = get_head_source(src);
+  order * head_rd = NULL;
+  float num=0;
+  while (head != NULL){
+    num = 0;
+    head_rd = get_head_order(ord);
+    while(head_rd!=NULL){
+      num += num_of_res(ord, head_rd->id, head->id);
+      head_rd = head_rd->n;
+    }
+    head->num -= num;
+    head = head->n;
+  }
+}
+
 int longest_solution (int **solutions, order *ord, int n, int maxx){
-  int i,j, mx=0, nm=0, i_max=0;
+  int i,j, mx=0, nm=0, i_max=-1;
   order *or;
   for (i=0; i<n; i++){
     nm=0;
@@ -78,17 +96,18 @@ int size=0;
 
 
 int recursive (source *src, order *ord, int *p, int *res, int j, int cur, int n){
-  if (j >= n) return 1;
+  //if (j >= n) return 1;
   int i;
   for (i = j; i<n; i++){
+    /*int s=0;
+      for (s=0; s<n;s++)
+      printf("_%d %d\n", res[s], p[i]);*/
+      
     if (iscorrect (src, ord, n-1, res, p[i])){
        if (cur > max)
        max = cur;
       res[cur] = p[i];
-      /*int s=0;
-      for (s=0; s<n;s++)
-      printf("_%d %d\n", res[s], cur);
-      printf("=========");*/
+      
       d = (int**) realloc(d, (size+1)*sizeof(int*));
       d[size] = (int*) malloc(n*sizeof(int));
       memcpy(d[size], res, n*sizeof(int));
@@ -97,6 +116,7 @@ int recursive (source *src, order *ord, int *p, int *res, int j, int cur, int n)
       if (recursive (src, ord, p, res, i+1, cur+1, n)) return 1;
       res[cur] = 0; //backtrace
     }
+    //printf("=========\n");
   }
 
   return 0;
@@ -115,12 +135,12 @@ int iscorrect (source *src, order *ord, int n, int *res, int p){
       for (i=0; i<=n; i++){
 	if(res[i]!=0){
 	  num += num_of_res(ord, res[i], hsrc->id);
-	  //printf("\n\n%d %d %f\n\n", hsrc->id, res[i], num);
+	  // printf("\n\n%d %d %f\n\n", hsrc->id, res[i], num);
 	}
       }
     }
     num += num_of_res(ord, p, hsrc->id);
-    //printf("%d %f*@*#*$\n", p, num);
+    // printf("%d %f*@*#*$\n", p, num);
     if (num > hsrc->num) return 0;
     hsrc = hsrc->n;
   }
@@ -129,10 +149,11 @@ int iscorrect (source *src, order *ord, int n, int *res, int p){
 
 float num_of_res (order *ord, unsigned order_id, unsigned source_id){
   order *ordr = get_order(ord, order_id);
-  product *aprd = ordr->contains;
-  a_src *asrc;
+  product *aprd = NULL;
+  a_src *asrc=NULL;
+  if (ordr != NULL) aprd = ordr->contains;
   float num=0;
-    asrc = aprd->contains;//начало списка состава a_src
+  if (aprd != NULL)asrc = aprd->contains;//начало списка состава a_src
     while (asrc!=NULL){
       if ((asrc->src)->id == source_id)
 	  num += ordr->num * asrc->num;

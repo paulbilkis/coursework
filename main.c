@@ -54,29 +54,50 @@ int main(void){
      head_clt = head_clt->n;
    }
    // prd = get_head_product(prd);
-   int *arg, n, i, *res,ls;
+   int *arg, n, i, j,*res,ls;
    fprintf(f,"\norders have been read:\n");
+   
    out_orders(ord, clt);
    fclose(f);
    //delete_imp_orders(ord, src);
    //out_orders(ord);
    //printf("\n*-*-*-*-*-*\n");
-   printf("%f", num_of_res(ord, 2,1));
+   //printf("%f", num_of_res(ord, 1,1));
    n = from_list_to_arg(ord, &arg);
    res = (int*) malloc(n*sizeof(int));
    for (i=0;i<n;i++)
      res[i] = 0;
-	       
+   	       
    f = fopen("out.txt", "w");
    recursive(src, ord, arg, res, 0,0,n);
    ls = longest_solution(d, ord, size, max);
+   //for(j=0;j<4;j++) {
+   for(i=0;i<=max;i++) printf("%d ",d[ls][i]);
+     printf("\n");
+     //}
    
-   order *result = from_arg_to_list(ord, d[ls], max+1);
-
+   order *result = NULL;
+   if (ls != -1){
+     result = from_arg_to_list(ord, d[ls], max+1);
+     
    printf("orders acomplish:\n");
    fprintf(f,"orders acomplish:\n");
    out_orders(result, clt);
+   get_rid_source_stock(result, src);
    //fout_orders(result,f);
-   fclose(f);
+   }else{
+     printf ("None of the orders could be acomplish!\n");
+   }
+    
+   printf ("\nleft-over stock:\n");
+
+   head_src = get_head_source(src);
+   while (head_src != NULL){
+     printf("id:%d amount:%f%c name:", head_src->id, head_src->num, head_src->type);
+    print_title(head_src->title);
+     printf("\n");
+     head_src = head_src->n;
+     }
    
+     fclose(f);
 }

@@ -1,6 +1,6 @@
 #include "headers.h"
 client * get_head_client(client *h){
-  while (h->prev != NULL)
+  while (h!=NULL && h->prev != NULL)
     h = h->prev;
   return h;
 }
@@ -16,25 +16,25 @@ int is_there_src (source *src, int id){
 }
 
 a_product * get_head_a_product (a_product *el){
-  while (el->prev != NULL)
+  while (el!=NULL && el->prev != NULL)
     el = el->prev;
   return el;
 }
 
 a_src * get_head_a_src (a_src *el){
-  while (el->prev != NULL)
+  while (el!=NULL && el->prev != NULL)
     el = el->prev;
   return el;
 }
 
 product * get_head_product (product *el){
-  while (el->prev != NULL)
+  while (el!=NULL && el->prev != NULL)
     el = el->prev;
   return el;
 }
 
 order * get_head_order (order *el){
-  while (el->prev != NULL)
+  while (el!=NULL && el->prev != NULL)
     el = el->prev;
   return el;
 }

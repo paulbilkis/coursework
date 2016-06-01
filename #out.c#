@@ -5,7 +5,6 @@ void out_orders (order *ord, client *clt){
   client *head_c = get_head_client(clt);
   product *pp;
   
-  
   while(head != NULL){
     printf ("id:%d num:%d client_id:%d order:", head->id, head->num, head->client_id);
     print_title((head->contains)->title);
