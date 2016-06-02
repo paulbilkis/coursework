@@ -2,52 +2,34 @@
 #include "headers.h"
 void out_orders (order *ord, client *clt){
   order *head = get_head_order(ord);
-  client *head_c = get_head_client(clt);
+  client *head_c;
   product *pp;
   
   
   while(head != NULL){
-    printf ("id:%d num:%d client_id:%d order:", head->id, head->num, head->client_id);
+    printf ("id:%d num:%d  order:", head->id, head->num);
     print_title((head->contains)->title);
+    printf(" client:");
+    head_c = get_client(clt, head->client_id);
+    if (head_c != NULL) print_title(head_c->title);
+    else printf(" null");
     printf("\n");
     head = head->n;
   }
-  /*while(head_c != NULL){
-     printf ("client name:");
-     print_title(head_c->title);
-     printf ("\norders:\n");
-     while(head != NULL){
-       if(head->client_id == head_c->id){
-	 printf("id:%d %d pcs of ", head->id, head->num);
-	 print_title((head->contains)->title);
-	 printf("\n");
-       }
-       head = head->n;
-     }
-     head = get_head_order(ord);
-     head_c = head_c->n;
-     }  */ 
 }
 
-void fout_orders (order *ord, FILE *f){
+void fout_orders (order *ord, client *clt, FILE *f){
   order *head = get_head_order(ord);
-  a_product *pp;
-  /* while(head != NULL){
-    fprintf (f,"@id:%d", head->id);
-    fprint_title(head->title,f);
-     pp = head->contains;
-     fprintf (f,"\ncontains:\n");
-     while (pp!= NULL){
-       if(pp->product != NULL){
-	 fprintf (f,"%d pcs of", pp->num);
-	 fprint_title((pp->product)->title,f);
-       }else{
-	 fprintf(f,"PRODUCT NOT FOUND");
-       }
-       fprintf(f,"\n");
-       pp = pp->n;
-     }
-     fprintf (f,"============\n");
-     head = head->n;
-     }*/
+  client *head_c;
+  product *pp;
+   while(head != NULL){
+     fprintf (f,"id:%d num:%d  order:", head->id, head->num);
+     fprint_title((head->contains)->title,f);
+     fprintf(f," client:");
+    head_c = get_client(clt, head->client_id);
+    if (head_c != NULL) fprint_title(head_c->title,f);
+    else fprintf(f," null");
+    fprintf(f,"\n");
+    head = head->n;
+  }
 }

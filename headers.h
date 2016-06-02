@@ -25,9 +25,11 @@ int recursive (source *src, order *ord, int *p, int *res, int j, int cur, int n)
 int is_there_prd (product *prd, int id);
 int is_there_src (source *src, int id);
 void fprint_title (str *head, FILE *f);
-void fout_orders (order *ord, FILE *f);
+void fout_orders (order *ord, client *clt, FILE *f);
 client * get_head_client(client *h);
 void out_orders (order *ord, client *clt);
+void get_rid_source_stock (order *ord, source *src);
+client * get_client (client *el, unsigned id);
 extern int max;
 extern int **d;
 extern int size;

@@ -61,6 +61,13 @@ source * get_source (source *el, unsigned id){
   return el;
 }
 
+client * get_client (client *el, unsigned id){
+  el = get_head_client(el);
+  while (el != NULL && el->id != id)
+    el = el->n;
+  return el;
+}
+
 str * get_head (str *el){
   while (el->prev != NULL)
     el = el->prev;
