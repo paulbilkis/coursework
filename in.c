@@ -13,7 +13,9 @@ void in_product (FILE *f, product **el, source *sources){
   char c;
   str *title;
   a_src *temp;
-  
+  time_t t;
+  int rad;
+  srand((unsigned) time(&t));
   while (!feof(f)){
     i=0;
     while (i < BLOCK_SIZE && fscanf(f, "%c", &c) != EOF){
@@ -50,7 +52,8 @@ void in_product (FILE *f, product **el, source *sources){
 	  temp->n = NULL;
 	  temp->prev = NULL;
 	  temp->src = get_source(sources, id);
-	  if ((temp->src)->type != 'p') temp->num = rnd(num);
+	  rad = rand();
+	  if ((temp->src)->type != 'p') temp->num = (((rad % 10))*0.01 + 1)*num;
 	  else temp->num = (int) num;
 	  
 	  if (cur->contains == NULL){

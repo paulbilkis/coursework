@@ -7,11 +7,11 @@ id:2 amount:170.000000g name: silver
 product receipts have been red from file:
 id:1 name:  gold ring
 contains:
-20.600000g of gold-982
+20.200001g of gold-982
 ============
 id:2 name:  silver ring
 contains:
-31.799999g of silver
+30.000000g of silver
 ============
 
 clients have been red from file:
