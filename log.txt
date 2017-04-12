@@ -7,19 +7,20 @@ id:2 amount:170.000000g name: silver
 product receipts have been red from file:
 id:1 name:  gold ring
 contains:
-20.200001g of gold-982
+21.799999g of gold-982
 ============
 id:2 name:  silver ring
 contains:
-30.000000g of silver
+30.900000g of silver
 ============
 
 clients have been red from file:
 
 id:1 name: mrs robinson
 id:2 name: herr sacher-masoch
+id:3 name: mr cruise
 
 orders have been read:
 id:1 num:15  order:  gold ring client: mrs robinson
 id:2 num:4  order:  silver ring client: herr sacher-masoch
-id:3 num:5  order:  silver ring client: null
+id:3 num:5  order:  silver ring client: mr cruise
