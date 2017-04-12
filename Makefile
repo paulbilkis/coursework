@@ -8,4 +8,3 @@ $(OBJECTS): $(SOURCES)
 
 $(TARGET): $(OBJECTS)
 	gcc -o coursework $(OBJECTS)
-.PHONY: all clean

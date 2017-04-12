@@ -20,67 +20,67 @@ void in_product (FILE *f, product **el, source *sources){
     i=0;
     while (i < BLOCK_SIZE && fscanf(f, "%c", &c) != EOF){
       if (was_end){
-	if (cur != NULL)(cur->title)->size += j;
-	j=0;
-	src = (product *) malloc(sizeof(product));
-	fscanf(f, "%d", &id);
-	src->id = id;
-	src->prev = NULL;
-	src->n = NULL;
-	src->contains = NULL;
-	src->title = (str *) malloc(sizeof(str));
-	(src->title)->size = 0;
-	(src->title)->n = NULL;
-	(src->title)->prev = NULL;
-	if (cur == NULL){
-	  cur = src;
-	}else{
-	  cur->n = src;
-	  src->prev = cur;
-	}
-	cur = src;
-	i++;
-	was_end = 0;
-	continue;
+        if (cur != NULL)(cur->title)->size += j;
+        j=0;
+        src = (product *) malloc(sizeof(product));
+        fscanf(f, "%d", &id);
+        src->id = id;
+        src->prev = NULL;
+        src->n = NULL;
+        src->contains = NULL;
+        src->title = (str *) malloc(sizeof(str));
+        (src->title)->size = 0;
+        (src->title)->n = NULL;
+        (src->title)->prev = NULL;
+        if (cur == NULL){
+          cur = src;
+        }else{
+          cur->n = src;
+          src->prev = cur;
+        }
+        cur = src;
+        i++;
+        was_end = 0;
+        continue;
       }else{
-	if (c == '\n'){
-	  was_end = 1;
-	  continue;
-	}else if(c == '#'){
-	  fscanf (f, "%d:%f", &id, &num);
-	  temp = (a_src *) malloc(sizeof(a_src));
-	  temp->n = NULL;
-	  temp->prev = NULL;
-	  temp->src = get_source(sources, id);
-	  rad = rand();
-	  if ((temp->src)->type != 'p') temp->num = (((rad % 10))*0.01 + 1)*num;
-	  else temp->num = (int) num;
-	  
-	  if (cur->contains == NULL){
-	    cur->contains = temp;
-	  }else{
-	    (cur->contains)->n = temp;
-	    temp->prev = cur->contains;
-	    cur->contains = temp;
-	  }
-	  i++;
-	}else{
-	 i++;
-	 if (j < TITLE_SIZE - (cur->title)->size){
-	   (cur->title)->data[(cur->title)->size + j] = c;
-	   j++;
-	 }else{
-	  title = (str *) malloc (sizeof(str));
-	  title->size=0;
-	  title->n=NULL;
-	  title->data[0] = c;
-	  ((cur)->title)->n = title;
-	  ((cur)->title)->size = j;
-	  title->prev = (cur)->title;
-	  (cur)->title = title;
-	  j=1;
-	 } 
-	}
+        if (c == '\n'){
+          was_end = 1;
+          continue;
+        }else if(c == '#'){
+          fscanf (f, "%d:%f", &id, &num);
+          temp = (a_src *) malloc(sizeof(a_src));
+          temp->n = NULL;
+          temp->prev = NULL;
+          temp->src = get_source(sources, id);
+          rad = rand();
+          if ((temp->src)->type != 'p') temp->num = (((rad % 10))*0.01 + 1)*num;
+          else temp->num = (int) num;
+          
+          if (cur->contains == NULL){
+            cur->contains = temp;
+          }else{
+            (cur->contains)->n = temp;
+            temp->prev = cur->contains;
+            cur->contains = temp;
+          }
+          i++;
+        }else{
+         i++;
+         if (j < TITLE_SIZE - (cur->title)->size){
+           (cur->title)->data[(cur->title)->size + j] = c;
+           j++;
+         }else{
+          title = (str *) malloc (sizeof(str));
+          title->size=0;
+          title->n=NULL;
+          title->data[0] = c;
+          ((cur)->title)->n = title;
+          ((cur)->title)->size = j;
+          title->prev = (cur)->title;
+          (cur)->title = title;
+          j=1;
+         } 
+        }
       }
     }
   }
@@ -113,36 +113,36 @@ void in_orders (FILE *f, order **el, product *products){
     i=0;
     while (i < BLOCK_SIZE && fscanf(f, "%c", &c) != EOF){
       if (was_end){
-	src = (order *) malloc(sizeof(order));
-	fscanf(f, "%d", &id);
-	src->id = id;
-	src->prev = NULL;
-	src->n = NULL;
-	src->contains = NULL;
-	if (cur == NULL){
-	  cur = src;
-	}else{
-	  cur->n = src;
-	  src->prev = cur;
-	}
-	cur = src;
-	i++;
-	was_end = 0;
-	continue;
+        src = (order *) malloc(sizeof(order));
+        fscanf(f, "%d", &id);
+        src->id = id;
+        src->prev = NULL;
+        src->n = NULL;
+        src->contains = NULL;
+        if (cur == NULL){
+          cur = src;
+        }else{
+          cur->n = src;
+          src->prev = cur;
+        }
+        cur = src;
+        i++;
+        was_end = 0;
+        continue;
       }else{
-	if (c == '\n'){
-	  was_end = 1;
-	  continue;
-	}else if(c == '@'){
-	  fscanf(f, "%d", &clientid);
-	  cur->client_id = clientid;
-	}else if(c == '#'){
-	  fscanf (f, "%d:%d", &id, &num);
-	  cur->contains = get_product(products, id);
-	  cur->num = num;
-	  //was_end=1;
-	  i++;
-	}
+        if (c == '\n'){
+          was_end = 1;
+          continue;
+        }else if(c == '@'){
+          fscanf(f, "%d", &clientid);
+          cur->client_id = clientid;
+        }else if(c == '#'){
+          fscanf (f, "%d:%d", &id, &num);
+          cur->contains = get_product(products, id);
+          cur->num = num;
+          //was_end=1;
+          i++;
+        }
       }
     }
   }
@@ -165,51 +165,51 @@ void in_source (FILE *f, source **el){
     i=0;
     while (i < BLOCK_SIZE && fscanf(f, "%c", &c) != EOF){
       if (was_end){
-	if (cur != NULL)(cur->title)->size += j;
-	j=0;
-	src = (source *) malloc(sizeof(source));
-	fscanf(f, "%d:%f:%c", &id, &num, &type);
-	if (type == 'p') num = (int) num;
-	src->id = id;
-	src->num = num;
-	src->type = type;
-	src->prev = NULL;
-	src->n = NULL;
-	src->title = (str *) malloc(sizeof(str));
-	(src->title)->size = 0;
-	(src->title)->n = NULL;
-	(src->title)->prev = NULL;
-	if (cur == NULL){
-	  cur = src;
-	}else{
-	  cur->n = src;
-	  src->prev = cur;
-	}
-	cur = src;
-	i++;
-	was_end = 0;
-	continue;
+        if (cur != NULL)(cur->title)->size += j;
+        j=0;
+        src = (source *) malloc(sizeof(source));
+        fscanf(f, "%d:%f:%c", &id, &num, &type);
+        if (type == 'p') num = (int) num;
+        src->id = id;
+        src->num = num;
+        src->type = type;
+        src->prev = NULL;
+        src->n = NULL;
+        src->title = (str *) malloc(sizeof(str));
+        (src->title)->size = 0;
+        (src->title)->n = NULL;
+        (src->title)->prev = NULL;
+        if (cur == NULL){
+          cur = src;
+        }else{
+          cur->n = src;
+          src->prev = cur;
+        }
+        cur = src;
+        i++;
+        was_end = 0;
+        continue;
       }else{
-	if (c == '\n'){
-	  was_end = 1;
-	  continue;
-	}else{
-	 i++;
-	 if (j < TITLE_SIZE - (cur->title)->size){
-	   (cur->title)->data[(cur->title)->size + j] = c;
-	   j++;
-	 }else{
-	  title = (str *) malloc (sizeof(str));
-	  title->size=0;
-	  title->n=NULL;
-	  title->data[0] = c;
-	  ((cur)->title)->n = title;
-	  ((cur)->title)->size = j;
-	  title->prev = (cur)->title;
-	  (cur)->title = title;
-	  j=1;
-	 } 
-	}
+        if (c == '\n'){
+          was_end = 1;
+          continue;
+        }else{
+         i++;
+         if (j < TITLE_SIZE - (cur->title)->size){
+           (cur->title)->data[(cur->title)->size + j] = c;
+           j++;
+         }else{
+          title = (str *) malloc (sizeof(str));
+          title->size=0;
+          title->n=NULL;
+          title->data[0] = c;
+          ((cur)->title)->n = title;
+          ((cur)->title)->size = j;
+          title->prev = (cur)->title;
+          (cur)->title = title;
+          j=1;
+         } 
+        }
       }
     }
   }
@@ -231,48 +231,48 @@ void in_clients (FILE *f, client **el){
     i=0;
     while (i < BLOCK_SIZE && fscanf(f, "%c", &c) != EOF){
       if (was_end){
-	if (cur != NULL)(cur->title)->size += j;
-	j=0;
-	src = (client *) malloc(sizeof(client));
-	fscanf(f, "%d", &id);
-	src->id = id;
-	src->prev = NULL;
-	src->n = NULL;
-	src->title = (str *) malloc(sizeof(str));
-	(src->title)->size = 0;
-	(src->title)->n = NULL;
-	(src->title)->prev = NULL;
-	if (cur == NULL){
-	  cur = src;
-	}else{
-	  cur->n = src;
-	  src->prev = cur;
-	}
-	cur = src;
-	i++;
-	was_end = 0;
-	continue;
+        if (cur != NULL)(cur->title)->size += j;
+        j=0;
+        src = (client *) malloc(sizeof(client));
+        fscanf(f, "%d", &id);
+        src->id = id;
+        src->prev = NULL;
+        src->n = NULL;
+        src->title = (str *) malloc(sizeof(str));
+        (src->title)->size = 0;
+        (src->title)->n = NULL;
+        (src->title)->prev = NULL;
+        if (cur == NULL){
+          cur = src;
+        }else{
+          cur->n = src;
+          src->prev = cur;
+        }
+        cur = src;
+        i++;
+        was_end = 0;
+        continue;
       }else{
-	if (c == '\n'){
-	  was_end = 1;
-	  continue;
-	}else{
-	 i++;
-	 if (j < TITLE_SIZE - (cur->title)->size){
-	   (cur->title)->data[(cur->title)->size + j] = c;
-	   j++;
-	 }else{
-	  title = (str *) malloc (sizeof(str));
-	  title->size=0;
-	  title->n=NULL;
-	  title->data[0] = c;
-	  ((cur)->title)->n = title;
-	  ((cur)->title)->size = j;
-	  title->prev = (cur)->title;
-	  (cur)->title = title;
-	  j=1;
-	 } 
-	}
+        if (c == '\n'){
+          was_end = 1;
+          continue;
+        }else{
+         i++;
+         if (j < TITLE_SIZE - (cur->title)->size){
+           (cur->title)->data[(cur->title)->size + j] = c;
+           j++;
+         }else{
+          title = (str *) malloc (sizeof(str));
+          title->size=0;
+          title->n=NULL;
+          title->data[0] = c;
+          ((cur)->title)->n = title;
+          ((cur)->title)->size = j;
+          title->prev = (cur)->title;
+          (cur)->title = title;
+          j=1;
+         } 
+        }
       }
     }
   }
